@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Todo from "./Todo";
+import { useTodos } from "../context/todosContext.jsx";
 
 const TodoListStyle = styled.ul`
     display: flex;
@@ -16,12 +17,14 @@ const TodoListStyle = styled.ul`
     }
 `;
 
-const TodoList = ({ todos, onChangeTodo, onDeleteTodo }) => {
+const TodoList = () => {
+    const todos = useTodos();
+
     return (
         <TodoListStyle>
             {todos.map((todo) => (
                 <li key={todo.id}>
-                    <Todo todo={todo} onChangeTodo={onChangeTodo} onDeleteTodo={onDeleteTodo} />
+                    <Todo todo={todo} />
                 </li>
             ))}
         </TodoListStyle>

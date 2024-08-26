@@ -2,14 +2,34 @@ import { useState } from "react";
 import styled from "styled-components";
 import Input from "./Input";
 import Button from "./Button";
+import { useTodosDispatch } from "../context/todosContext.jsx";
 
 const TodoText = styled.div`
     width: 100%;
 `;
 
-const Todo = ({ todo, onChangeTodo, onDeleteTodo }) => {
+const Todo = ({ todo }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const dispatch = useTodosDispatch();
     let todoContent;
+
+    // 변경
+    function handleChangeTodo(todo) {
+        dispatch({
+            // "action" 객체:
+            type: "changeTodo",
+            todo,
+        });
+    }
+
+    // 삭제
+    function handleDeleteTodo(todoId) {
+        dispatch({
+            // "action" 객체:
+            type: "deleteTodo",
+            id: todoId,
+        });
+    }
 
     if (isEditing) {
         todoContent = (
@@ -17,7 +37,7 @@ const Todo = ({ todo, onChangeTodo, onDeleteTodo }) => {
                 <Input
                     value={todo.text}
                     onChange={(e) => {
-                        onChangeTodo({
+                        handleChangeTodo({
                             ...todo,
                             text: e.target.value,
                         });
@@ -40,7 +60,7 @@ const Todo = ({ todo, onChangeTodo, onDeleteTodo }) => {
                 type="checkbox"
                 checked={todo.done}
                 onChange={(e) => {
-                    onChangeTodo({
+                    handleChangeTodo({
                         ...todo,
                         done: e.target.checked,
                     });
@@ -49,7 +69,7 @@ const Todo = ({ todo, onChangeTodo, onDeleteTodo }) => {
 
             {todoContent}
 
-            <Button onClick={() => onDeleteTodo(todo.id)}>삭제</Button>
+            <Button onClick={() => handleDeleteTodo(todo.id)}>삭제</Button>
         </label>
     );
 };
